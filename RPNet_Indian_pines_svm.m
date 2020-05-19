@@ -5,10 +5,10 @@ tic     %开始计时
 repeat=2;   %实验重复次数
 
 %手动设置降维参数以及激活函数
-dr='PCA';   %降维方法 MDS,PCA,LDA,FA
+dr='MDS';   %降维方法 MDS,PCA,LDA,FA
 
-% ActivationFunction='LeakyRelu';
-ActivationFunction='Relu';
+ActivationFunction='LeakyRelu';
+% ActivationFunction='Relu';
 
 
 num_PC = 3; %降维参数
@@ -121,67 +121,65 @@ for ii=1:repeat
     end
     
     
-    for layernum=Layernum
-        
-        X_joint = [];
-        for i=1:layernum
-            X_joint = [X_joint StackFeature{i}.feature];
-        end
-        X_joint = [X_joint reshape(Data,row*col,num_feature)];
-        X_joint_mean = mean(X_joint);
-        X_joint_std = std(X_joint)+1;
-        X_joint = bsxfun(@rdivide, bsxfun(@minus, X_joint, X_joint_mean), X_joint_std);
-        
-        randomLabel = cell(num_class,1);
-        for i=1:num_class
-            index = find(Label==i);
-            randomLabel{i}.array = randperm(size(index,1));
-        end
-        
-        X_train = [];
-        X_test = [];
-        y_train = [];
-        y_test = [];
-        
-        for i=1:num_class
-            index = find(Label==i);
-            randomX = randomLabel{i,1}.array;
-            train_num = train_num_array(i);
-            X_train = [X_train;X_joint(index(randomX(1:train_num)),:)];
-            y_train = [y_train;Label(index(randomX(1:train_num)),1)];
-            
-            X_test = [X_test;X_joint(index(randomX(train_num+1:end)),:)];
-            y_test = [y_test;Label(index(randomX(train_num+1:end)),1)];
-            
-        end
-        
-        %设置SVM参数
-        best_c = 1024;
-        best_g = 2^-6;
-        svm_option = horzcat('-c',' ',num2str(best_c),' -g',' ',num2str(best_g));
-        
-        %训练SVM
-        model = libsvm_svmtrain(y_train,X_train,svm_option);
-        %预测
-        [predict_label, ~, ~] = svmpredict(y_test, X_test, model);
-        %计算OA，Kappa，以及每个类别的准确率
-        [OA, Kappa, producerA] = CalAccuracy(predict_label,y_test);
-        
-        %保存OA，Kappa
-        OA_set(ii)=OA;
-        Kappa_set(ii)=Kappa;
-        
-        
-        [labels, accuracy, dec_values] = svmpredict(Label, X_joint, model);
-        X_result = drawresult(labels,row,col, 2);
-        
-        %输出预测图像
-        str0='C:\Documents\graduation_project\HSIC_RPNet\figure\';
-        str1=strcat('Indian_Pines_',dr,'_svm_',ActivationFunction);
-        str2='.png';
-        save_path=[str0,str1,str2];
-        imwrite(X_result,save_path);
+    
+    X_joint = [];
+    for i=1:Layernum
+        X_joint = [X_joint StackFeature{i}.feature];
     end
+    X_joint = [X_joint reshape(Data,row*col,num_feature)];
+    X_joint_mean = mean(X_joint);
+    X_joint_std = std(X_joint)+1;
+    X_joint = bsxfun(@rdivide, bsxfun(@minus, X_joint, X_joint_mean), X_joint_std);
+    
+    randomLabel = cell(num_class,1);
+    for i=1:num_class
+        index = find(Label==i);
+        randomLabel{i}.array = randperm(size(index,1));
+    end
+    
+    X_train = [];
+    X_test = [];
+    y_train = [];
+    y_test = [];
+    
+    for i=1:num_class
+        index = find(Label==i);
+        randomX = randomLabel{i,1}.array;
+        train_num = train_num_array(i);
+        X_train = [X_train;X_joint(index(randomX(1:train_num)),:)];
+        y_train = [y_train;Label(index(randomX(1:train_num)),1)];
+        
+        X_test = [X_test;X_joint(index(randomX(train_num+1:end)),:)];
+        y_test = [y_test;Label(index(randomX(train_num+1:end)),1)];
+        
+    end
+    
+    %设置SVM参数
+    best_c = 1024;
+    best_g = 2^-6;
+    svm_option = horzcat('-c',' ',num2str(best_c),' -g',' ',num2str(best_g));
+    
+    %训练SVM
+    model = libsvm_svmtrain(y_train,X_train,svm_option);
+    %预测
+    [predict_label, ~, ~] = svmpredict(y_test, X_test, model);
+    %计算OA，Kappa，以及每个类别的准确率
+    [OA, Kappa, producerA] = CalAccuracy(predict_label,y_test);
+    
+    %保存OA，Kappa
+    OA_set(ii)=OA;
+    Kappa_set(ii)=Kappa;
+    
+    
+    [labels, accuracy, dec_values] = svmpredict(Label, X_joint, model);
+    X_result = drawresult(labels,row,col, 2);
+    
+    %输出预测图像
+    str0='C:\Documents\graduation_project\HSIC_RPNet\figure\';
+    str1=strcat('Indian_Pines_',dr,'_svm_',ActivationFunction);
+    str2='.png';
+    save_path=[str0,str1,str2];
+    imwrite(X_result,save_path);
 end
 
 %计算OA，Kappa的均值
