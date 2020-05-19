@@ -1,4 +1,4 @@
-function data_feature = extract_features(X, centroids)
+function data_feature = extract_features(X, centroids,ActivationFunction)
 [row, col, num_PC] = size(X);
 K = size(centroids,2);
 w = sqrt(size(centroids,1)/num_PC);
@@ -25,8 +25,17 @@ end
 Z= XC;
 % Z = -bsxfun(@minus, XC,0.5*CC);%z :m*K
 mu = mean(Z, 2);
-% data_feature = max(bsxfun(@minus, Z, mu), 0);%relu
-data_feature = max(bsxfun(@minus, Z, mu), 0.01.*bsxfun(@minus, Z, mu));%LeakyReLU
+
+if strcmp(ActivationFunction,'Relu')
+    data_feature = max(bsxfun(@minus, Z, mu), 0);%Relu
+elseif strcmp(ActivationFunction,'LeakyRelu')
+    data_feature = max(bsxfun(@minus, Z, mu), 0.01.*bsxfun(@minus, Z, mu));%LeakyReLU
+else 
+    error('Error ActivationFunction');
+end
+
+% data_feature = max(bsxfun(@minus, Z, mu), 0);%Relu
+% data_feature = max(bsxfun(@minus, Z, mu), 0.01.*bsxfun(@minus, Z, mu));%LeakyReLU
 % data_feature = max(bsxfun(@minus, Z, mu), 1.6.*(exp(bsxfun(@minus, Z, mu))-1));%ELU
 
 % CC = sum(centroids.^2);
