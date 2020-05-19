@@ -6,7 +6,7 @@ dr='MDS';
 OA_sum=zeros(1,repeat);
 Kappa_sum=zeros(1,repeat);
 
-%% Load data
+% Load data
 data_name='Indian_pines_corrected.mat';
 data_gt='Indian_pines_gt.mat';
 % data_name='PaviaU.mat';
@@ -121,7 +121,7 @@ for l=1:Layernum
     clear X_extension;
 end
 
-%%
+
 % for layernum=1:Layernum
 for layernum=Layernum
     
@@ -174,8 +174,12 @@ for layernum=Layernum
     [labels, accuracy, dec_values] = svmpredict(Label, X_joint, model);
     
     X_result = drawresult(labels,row,col, 2);
-    imwrite(X_result,strcat('Indian_Pines_',dr,'_svm','.png'),'png');
-
+%     imwrite(X_result,strcat('Indian_Pines_',dr,'_svm','.png'),'png');
+    str0='C:\Documents\graduation_project\HSIC_RPNet\figure\';
+    str1=strcat('Indian_Pines_',dr,'_svm','.png');
+    str2='.png';
+    save_path=[str0,str1,str2];
+    imwrite(X_result,save_path);
 end
 end
 OA_average=mean(OA_sum);
