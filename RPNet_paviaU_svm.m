@@ -11,8 +11,8 @@ ActivationFunction='LeakyRelu';
 % ActivationFunction='Relu';
 
 
-num_PC = 3; %降维参数
-Layernum = 5;    %网络层数
+num_PC = 10; %降维参数
+Layernum = 10;    %网络层数
 w=21;   %随机块大小
 win_inter = (w-1)/2;
 epsilon = 0.01;
