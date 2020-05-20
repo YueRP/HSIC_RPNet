@@ -3,23 +3,33 @@ An improved RPNet for HSI classification
 
 ## 软件环境
 本代码通过MATLAB R2018a软件编写。
+
 使用前，必须先安装一个MATLAB降维算法工具包[drtoolbox](http://lvdmaaten.github.io/drtoolbox/)
 
 
 
 ## 文件夹介绍
 [dataset](https://github.com/YueRP/HSIC_RPNet/tree/master/dataset) 存储所有的数据集文件
+
 [figure](https://github.com/YueRP/HSIC_RPNet/tree/master/figure) 存储程序生成的所有的图片以及论文中的相关实验数据作的折线图(为方便latex作图，以pdf文件保存)
+
 [utils](https://github.com/YueRP/HSIC_RPNet/tree/master/utils) 存储libsvm函数包以及一些子函数实现 
 
 ## 代码用途
 [Plot_GroundTruth.m](https://github.com/YueRP/HSIC_RPNet/blob/master/Plot_GroundTruth.m) 绘制数据集的地面真值图
+
 [RPNet_Indian_pines_knn.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_Indian_pines_knn.m) Indian_pines数据集的KNN分类
+
 [RPNet_Indian_pines_svm.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_Indian_pines_svm.m) Indian_pines数据集的SVM分类
+
 [RPNet_KSC_svm.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_KSC_svm.m) KSC数据集的SVM分类
+
 [RPNet_Salinas_svm.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_Salinas_svm.m) Salinas数据集的SVM分类
+
 [RPNet_paviaU_knn.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_paviaU_knn.m) paviaU数据集的KNN分类
+
 [RPNet_paviaU_svm.m](https://github.com/YueRP/HSIC_RPNet/blob/master/RPNet_paviaU_svm.m) paviaU数据集的SVM分类
+
 [exp_data.xlsx](https://github.com/YueRP/HSIC_RPNet/blob/master/exp_data.xlsx) 记录了所有的实验数据以及相关的原始折线图
 
 ## 代码中的参数设置
